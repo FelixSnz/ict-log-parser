@@ -11,8 +11,9 @@ class TreeLog:
 
     Methods
     -------
-    parse(parent_node: Node = None) -> str
-        Parses the log string and constructs the tree structure.
+    build_tree(parent_node: Node = None) -> str
+        recursively builds a nested tree from the parent node using the remaining log_str
+        until its len is 0.
     """
 
     def __init__(self, path: str) -> None:
