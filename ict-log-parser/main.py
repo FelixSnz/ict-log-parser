@@ -1,30 +1,24 @@
 from anytree import Node, RenderTree
-from anytree.exporter import JsonExporter
-from parse_tools import parse_log
+from tree_log import TreeLog
 import os
-from export import export
+from export import export as excel_export
 
 log_folder_path = "log-samples"
 
-root = Node("root", data="")
+def main():
+    root = Node("root", data="")
 
-for log_file in os.listdir(log_folder_path):
-    with open(os.path.join(log_folder_path, log_file), 'r') as f:
-        log_str = f.read()
+    for log_path in os.listdir(log_folder_path):
+        temp_tree_log = TreeLog(log_path)
+        temp_tree_log.build_tree(root) # Now 'root' contains the tree structure of the log file
 
-    parse_log(log_str, root)
-    # Now 'root' contains the tree structure of the log file
-
-
-for pre, _, node in RenderTree(root):
-    print(f"{pre}{node.name} {node.data if hasattr(node, 'data') else ''}")
+     #just to visualize the tree
+    for pre, _, node in RenderTree(root):
+        print(f"{pre}{node.name} {node.data if hasattr(node, 'data') else ''}")
 
 
-exporter = JsonExporter(indent=2, sort_keys=True)
-json_data = exporter.export(root)
+    excel_export(root)
 
-# Specify the full path where you want to save the .json file
-# with open("out/tree.json", "w") as f:
-#     f.write(json_data)
 
-export(root)
+if __name__ == "__main__":
+    main()
